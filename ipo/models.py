@@ -5,7 +5,7 @@ from django.contrib.postgres.forms.jsonb import JSONField
 from django.db import models
 
 
-class Flower(models.Model):
+class Job(models.Model):
     id = models.UUIDField(primary_key=True)
     url = models.URLField()
     method = models.CharField(max_length=16)
