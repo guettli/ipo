@@ -1,3 +1,9 @@
+import os
+import getpass
+
+USER=getpass.getuser()
+venv=os.path.basename(os.environ['VIRTUAL_ENV'])
+
 """
 Django settings for ipo_site project.
 
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ipo',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +82,8 @@ WSGI_APPLICATION = 'ipo_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': venv,
     }
 }
 
