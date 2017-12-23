@@ -8,12 +8,12 @@ IPO is an open source asynchronous job queue which is based on PostgreSQL.
 Steps
 =====
 
-# The IPO daemon gets started. It uses the PostgreSQL LISTEN method to wait for changes in the database.
-# You insert a new URL into the database table ipo_flower.
-# The IPO daemon will get a notification via PostgreSQL NOTIFY on the input channel.
-# The IPO daemon opens the URL and puts the open file descriptor into its event loop.
-# If the URL response gets received, the IPO daemon will store the response and NOTIFY on the output channel.
-# If some process is listening on the output channel for the output channel, this process get notified and it can read the resopnse from the database
+#. The IPO daemon gets started. It uses the PostgreSQL LISTEN method to wait for changes in the database.
+#. You insert a new URL into the database table ipo_flower.
+#. The IPO daemon will get a notification via PostgreSQL NOTIFY on the input channel.
+#. The IPO daemon opens the URL and puts the open file descriptor into its event loop.
+#. If the URL response gets received, the IPO daemon will store the response and NOTIFY on the output channel.
+#. If some process is listening on the output channel for the output channel, this process get notified and it can read the resopnse from the database
 
 
 How to insert a new job into the queue?
@@ -47,12 +47,16 @@ Create Database
 
 Replace "guettli" with the name of your linux user account.
 
+.. code:: shell
+
     postgres@pc> createuser guettli
     postgres@pc> createdb -O guettli ipo-env
 
 
 Create Virtualenv
 =================
+
+.. code:: python
 
     guettli@pc> virtualenv ipo-env
     guettli@pc> cd ipo-env
