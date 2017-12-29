@@ -54,6 +54,7 @@ setup(
     install_requires=[
         'Django==1.11',
         'psycopg2',
+        'subx',
        ],
 
 )
