@@ -52,11 +52,8 @@ setup(
     packages=setuptools.find_packages(),
 
     install_requires=[
-       'Django==1.11',
+        'Django==1.11',
+        'psycopg2',
        ],
 
-    entry_points={
-        'console_scripts': [
-        ],
-    }
 )
