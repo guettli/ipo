@@ -2,6 +2,8 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 import os
+
+import re
 import subx
 
 import time
@@ -22,6 +24,7 @@ from ipo.models import Job
 
 
 class IPOServerTestCase(TestCase):
+    longMessage = True
 
     def start_ipo_server(self):
         temp_file=tempfile.mktemp(prefix=self.id())
@@ -41,7 +44,11 @@ class IPOServerTestCase(TestCase):
         parts = result.stdout.split()
         self.assertEqual('Job', parts[0], parts)
         job_id = parts[1]
-        os.killpg(os.getpgid(pipe.pid), signal.SIGKILL)
-        pipe.wait()
-        assert 0, open(temp_file).read()
+        self.assertTrue(Job.objects.filter(id=job_id).exists(), parts)
+        os.killpg(os.getpgid(pipe.pid), signal.SIGTERM)
+        ret = pipe.wait()
+        server_output = open(temp_file).read()
+        self.assertEqual(-signal.SIGTERM, ret, server_output)
+        self.assertTrue(re.match(r'^listening on ipo_job_insert\n#ipo_job_insert - \S+$',
+                                 server_output), server_output)
 
