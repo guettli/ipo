@@ -67,3 +67,24 @@ Create Virtualenv
     guettli@pc> python src/ipo/ipo_site/manage.py migrate
 
 
+Why reinvent and not reuse?
+===========================
+
+In the year 2001 I played around with twisted. It swallowed exections, which means
+for me that I can't use it as rock solid basic library.
+
+In the year 2012 I used celery, but I was not happy with it. It does too much. It is too big.
+
+Some years later I looked at python-rq, but this is based on redis. Up to now we don't use redis
+and I need a persistent queue which survives server reboots. In some usecases persistence is
+more important than performance.
+
+In 2016 I tried to find a tool, but there seems to be no Python based solution up to now: https://softwarerecs.stackexchange.com/questions/36331/async-job-processing-based-on-postgresql
+
+In december 2017 I had the idea to let the daemon do no work at all. It only dispatches URLs, it does not execute the job itself.
+With this decopling ("Separation of concerns") the daemon looked simple enough to start coding :-)
+
+
+
+
+
