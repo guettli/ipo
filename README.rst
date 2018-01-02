@@ -5,6 +5,8 @@ https://en.wikipedia.org/wiki/IPO_model
 
 IPO is an open source asynchronous job queue which is based on PostgreSQL.
 
+In this implementation a job is an URL.
+
 Steps
 =====
 
@@ -12,8 +14,8 @@ Steps
 #. You insert a new URL into the database table ipo_job.
 #. The IPO daemon will get a notification via PostgreSQL NOTIFY on the input channel.
 #. The IPO daemon opens the URL and puts the open file descriptor into its event loop.
-#. If the URL response gets received, the IPO daemon will store the response and NOTIFY on the output channel.
-#. If some process is listening on the output channel for the output channel, this process get notified and it can read the resopnse from the database
+#. If the URL response gets received, the IPO daemon will store the response and executes a NOTIFY on the output channel.
+#. If some process is listening on the output channel, this process get notified and it can read the resopnse from the database.
 
 
 How to insert a new job into the queue?
@@ -31,7 +33,7 @@ You need to supply these values:
 How to receive the notification as soon as the response arrives?
 ===============================================================
 
-LISTEN on the output channel. TODO Details!
+LISTEN on the particular output channel. The name of the output channel contains the UUID of the job-URL: "ipo_job_response_{UUID}".
 
 
 Design Goals
