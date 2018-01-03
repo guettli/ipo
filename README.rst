@@ -7,6 +7,11 @@ IPO is an open source asynchronous job queue which is based on PostgreSQL.
 
 In this implementation a job is an URL.
 
+Status
+======
+
+Brainstorming, not usable up to now.
+
 Steps
 =====
 
