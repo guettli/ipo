@@ -41,6 +41,20 @@ How to receive the notification as soon as the response arrives?
 LISTEN on the particular output channel. The name of the output channel contains the UUID of the job-URL: "ipo_job_response_{UUID}".
 
 
+Retry and number of workers
+===========================
+
+At least in the beginning the ipo-server will have one process and one thread. I guess this will
+be enough since the server does only async io, it does no processing.
+
+It is up to the http servers which process the URLs to have a queue of worker processes.
+
+The ipo-server does not do any queing. If you insert 1k URLs, then it will open 1k URLs.
+
+If the http response is "503 Service Unavailable" the ipo-server will check the Retry-After header
+of the response and will retry accordingly. See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+
+
 Design Goals
 ============
 
