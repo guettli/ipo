@@ -72,6 +72,13 @@ Create Virtualenv
     guettli@pc> python src/ipo/ipo_site/manage.py migrate
 
 
+Do later list
+=============
+
+* Writing response to DB. Write the data in several small chunks instead of big one UPDATE? See https://dba.stackexchange.com/questions/194602/chunking-data-into-a-postgresql-bytea-column/194654#194654
+
+
+
 Why reinvent and not reuse?
 ===========================
 
