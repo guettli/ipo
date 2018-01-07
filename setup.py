@@ -1,7 +1,8 @@
-import setuptools
-from setuptools import setup, find_packages
 from codecs import open
 from os import path
+
+import setuptools
+from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
 
@@ -40,7 +41,6 @@ setup(
         # Pick your license as you wish (should match "license" above)
         'License :: OSI Approved :: Apache Software License',
 
-
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 2',
@@ -55,6 +55,7 @@ setup(
         'Django==1.11',
         'psycopg2',
         'subx',
-       ],
+        'requests',
+    ],
 
 )

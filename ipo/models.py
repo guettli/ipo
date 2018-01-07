@@ -14,7 +14,14 @@ class Job(models.Model):
     data = JSONField()
     status = models.SmallIntegerField(default=0)
     referrer = models.URLField()
-    response = models.BinaryField(null=True)
+    response_header = JSONField()
+    response_content = models.BinaryField(null=True)
+    traceback = models.TextField(default='')
+
+    STATUS_WAITING = 0
+    STATUS_RUNNING = 1
+    STATUS_FAILED = 2
+    STATUS_OK = 200
 
     def __unicode__(self):
         return 'Job %s' % self.id

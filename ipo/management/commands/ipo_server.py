@@ -2,13 +2,17 @@ from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 
 import select
+import sys
+import traceback
 
 import psycopg2
-import sys
+import requests
 from django.core.management.base import BaseCommand
 from django.db import connection as django_connection
+from ipo.models import Job
 
 insert_channel_name = 'ipo_job_insert'
+
 
 class Command(BaseCommand):
     help = 'Run IPO server (endless loop)'
@@ -25,8 +29,8 @@ class Command(BaseCommand):
         epoll = select.epoll()
         epoll.register(django_connection.connection, select.EPOLLIN)
         sys.stdout.write('listening on %s\n' % insert_channel_name)
-        self.fileno_to_callback=dict()
-        self.fileno_to_callback[django_connection.connection.fileno()]=self.do_data_from_database
+        self.fileno_to_callback = dict()
+        self.fileno_to_callback[django_connection.connection.fileno()] = self.do_data_from_database
         while True:
             self.loop(epoll)
 
@@ -35,3 +39,15 @@ class Command(BaseCommand):
         while django_connection.connection.notifies:
             notify = django_connection.connection.notifies.pop()
             print('#%s - %s' % (notify.channel, notify.payload))
+            job = Job.objects.get(id=notify.payload)
+            try:
+                response = requests.get(job.url)
+            except Exception as exc:
+                job.traceback = traceback.format_exc()
+                job.status = Job.STATUS_FAILED
+                job.save()
+                continue
+            job.status = response.status_code
+            job.response_content = response.content
+            job.response_header = response.headers
+            job.save()
