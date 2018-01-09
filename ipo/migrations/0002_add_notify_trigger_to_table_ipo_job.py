@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL('''
-CREATE OR REPLACE FUNCTION ipo_job_on_insert() RETURNS trigger AS $$
+CREATE FUNCTION ipo_job_on_insert() RETURNS trigger AS $$
 DECLARE
 BEGIN
   PERFORM pg_notify('ipo_job_insert', CAST(NEW.id AS text));
