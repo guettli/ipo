@@ -18,4 +18,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         url=kwargs.pop('url')
-        sys.stdout.write('%s\n' % Job.objects.create(url=url))
+        job = Job.objects.create(url=url)
+        sys.stdout.write('%s\n' % job)
+        return job

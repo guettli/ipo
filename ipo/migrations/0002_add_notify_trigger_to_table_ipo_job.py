@@ -22,6 +22,20 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER ipo_job_on_insert_trigger 
-    AFTER INSERT ON ipo_job FOR EACH ROW EXECUTE PROCEDURE ipo_job_on_insert();       
+    AFTER INSERT ON ipo_job FOR EACH ROW EXECUTE PROCEDURE ipo_job_on_insert(); 
+
+
+CREATE FUNCTION ipo_job_on_done() RETURNS trigger AS $$
+DECLARE
+BEGIN
+  PERFORM pg_notify(concat('ipo_job_done_', replace(CAST(NEW.id AS text), '-', '')), CAST(NEW.id AS text));
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ipo_job_on_done_trigger 
+    AFTER UPDATE ON ipo_job FOR EACH ROW EXECUTE PROCEDURE ipo_job_on_done(); 
+    
+          
         ''')
     ]

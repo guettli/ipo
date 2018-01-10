@@ -10,12 +10,16 @@ import requests
 from django.core.management.base import BaseCommand
 from django.db import connection as django_connection
 from ipo.models import Job
+from thread import start_new_thread
 
 insert_channel_name = 'ipo_job_insert'
 
 
 class Command(BaseCommand):
     help = 'Run IPO server (endless loop)'
+
+    def __init__(self, *args, **kwargs):
+        super(Command, self).__init__(*args, **kwargs)
 
     def loop(self, epoll):
         for fileno, event in epoll.poll():
@@ -40,14 +44,18 @@ class Command(BaseCommand):
             notify = django_connection.connection.notifies.pop()
             print('#%s - %s' % (notify.channel, notify.payload))
             job = Job.objects.get(id=notify.payload)
-            try:
-                response = requests.get(job.url)
-            except Exception as exc:
-                job.traceback = traceback.format_exc()
-                job.status = Job.STATUS_FAILED
-                job.save()
-                continue
-            job.status = response.status_code
-            job.response_content = response.content
-            job.response_header = response.headers
+            start_new_thread(self.fetch_url_in_thread, (job,))
+
+    def fetch_url_in_thread(self, job):
+        method = getattr(requests, job.method)
+        try:
+            response = method(job.url)
+        except Exception as exc:
+            job.traceback = traceback.format_exc()
+            job.status = Job.STATUS_FAILED
             job.save()
+            return
+        job.status = response.status_code
+        job.response_content = response.content
+        job.response_header = response.headers
+        job.save()
