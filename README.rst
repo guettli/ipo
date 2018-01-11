@@ -101,8 +101,7 @@ for me that I can't use it as rock solid basic library.
 
 In the year 2012 I used celery, but I was not happy with it. It does too much. It is too big.
 
-Some years later I looked at python-rq, but this is based on redis. Up to now we don't use redis
-and I need a persistent queue which survives server reboots. In some usecases persistence is
+Some years later I looked at python-rq, but this is based on redis. Since we already use PostgreSQL, I want to avoid an other data storage. In some usecases persistence (`ACID <https://en.wikipedia.org/wiki/ACID>`_) is
 more important than performance.
 
 In 2016 I tried to find a tool, but there seems to be no Python based solution up to now: https://softwarerecs.stackexchange.com/questions/36331/async-job-processing-based-on-postgresql
