@@ -20,7 +20,7 @@ Steps
 #. The IPO daemon will get a notification via PostgreSQL NOTIFY on the input channel.
 #. The IPO daemon opens the URL and puts the open file descriptor into its event loop.
 #. If the URL response gets received, the IPO daemon will store the response and executes a NOTIFY on the output channel.
-#. If some process is listening on the output channel, this process get notified and it can read the resopnse from the database.
+#. If some process is listening on the output channel, this process get notified and it can read the response from the database.
 
 
 How to insert a new job into the queue?
