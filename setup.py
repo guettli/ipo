@@ -52,7 +52,7 @@ setup(
     packages=setuptools.find_packages(),
 
     install_requires=[
-        'Django==1.11',
+        'django>=1.11.21',
         'psycopg2',
         'subx',
         'requests',
